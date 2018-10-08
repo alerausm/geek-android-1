@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Упражнения</string>
+    <string name="workout">упражнение</string>
+    <string name="msg_invalid_input">Некорректный ввод</string>
+    <string name="mask_weight"  formatted="false">%d кг</string>
+    <string name="lbl_records">Рекорды</string>
+    <string name="lbl_record_date">Дата рекорда</string>
+    <string name="lbl_record_count">Количество повторов</string>
+    <string name="lbl_weight">Вес</string>
+    <string name="lbl_workout_count">Количество попыток</string>
+    <string name="btn_save">Сохранить</string>
+    <string name="lbl_description">Описание</string>
+    <string name="stub_description">Шалтай-Болтай Сидел на стене.
+Шалтай-Болтай
+Свалился во сне.
+Вся королевская конница,
+Вся королевская рать
+Не может Шалтая,
+Не может Болтая,
+Шалтая-Болтая,
+Болтая-Шалтая,
+Шалтая-Болтая собрать!</string>
+</resources>
