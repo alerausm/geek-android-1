@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewHolder = new ViewHolder(findViewById(R.id.view_holder));
-        setWorkount(new Workout("Жим лежа").setDescription(getString(R.string.stub_description)));
+        setWorkount(new Workout(getString(R.string.stub_workout_name)).setDescription(getString(R.string.stub_description)));
     }
 
 
