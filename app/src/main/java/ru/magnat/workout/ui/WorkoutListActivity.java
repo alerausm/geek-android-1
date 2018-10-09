@@ -6,12 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import java.util.UUID;
 
@@ -26,6 +25,7 @@ public class WorkoutListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.workout_list_layout);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         realm = Realm.getDefaultInstance();
         initUi();
     }

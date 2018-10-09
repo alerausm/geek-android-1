@@ -27,6 +27,12 @@ public class WorkoutTypeActivity extends AppCompatActivity {
     WorkoutType workoutType;
     private ViewHolder viewHolder;
 
+    public static void open(Activity parentActivity, WorkoutType workoutType) {
+        Intent intent = new Intent(parentActivity,WorkoutTypeActivity.class);
+        intent.putExtra(KEY_WORKOUT_TYPE_ID,workoutType.getId());
+        parentActivity.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,12 +101,6 @@ public class WorkoutTypeActivity extends AppCompatActivity {
         realm.close();
     }
 
-    public static void open(Activity parentActivity, WorkoutType workoutType) {
-        Intent intent = new Intent(parentActivity,WorkoutTypeActivity.class);
-        intent.putExtra(KEY_WORKOUT_TYPE_ID,workoutType.getId());
-        parentActivity.startActivity(intent);
-
-    }
 
     public ViewHolder getViewHolder() {
         return viewHolder;

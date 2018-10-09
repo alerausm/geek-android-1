@@ -15,6 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
+            android:background="?android:attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -24,6 +25,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:paddingTop="?android:attr/actionBarSize"
         android:divider="@android:color/transparent"
         android:dividerHeight="10.0sp"
         />
