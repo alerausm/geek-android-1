@@ -13,4 +13,7 @@
     <string name="lbl_description">Description</string>
     <string name="stub_description">Humpty dumpty sat on a wall,Humpty Dumpty had a great fall.All the king’s horses,And all the king’s men,Couldn’t put Humpty together again</string>
     <string name="stub_workout_name">bench press</string>
+    <string name="lbl_add_workout_type">Add workout type</string>
+    <string name="lbl_add">Add</string>
+    <string name="lbl_cancel">Cancel</string>
 </resources>
