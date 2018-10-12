@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Workout</string>
+    <string name="workout">workout</string>
+    <string name="msg_invalid_input">Input invalid</string>
+    <string name="mask_weight"  formatted="false">%d kg</string>
+    <string name="lbl_records">Records</string>
+    <string name="lbl_record_date">Record date</string>
+    <string name="lbl_record_count">Count</string>
+    <string name="lbl_weight">Weight</string>
+    <string name="lbl_workout_count">Count</string>
+    <string name="btn_save">Save</string>
+    <string name="lbl_description">Description</string>
+    <string name="stub_description">Humpty dumpty sat on a wall,Humpty Dumpty had a great fall.All the king’s horses,And all the king’s men,Couldn’t put Humpty together again</string>
+    <string name="stub_workout_name">bench press</string>
+</resources>
