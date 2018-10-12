@@ -7,6 +7,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -26,8 +28,42 @@ public class WorkoutListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.workout_list_layout);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         realm = Realm.getDefaultInstance();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initUi();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        realm.close();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_workout_list,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_exit:
+                finish();
+                return false;
+            default:
+            return super.onOptionsItemSelected(item);
+        }
+
     }
 
     private void initUi() {
@@ -81,6 +117,6 @@ public class WorkoutListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        realm.close();
+
     }
 }

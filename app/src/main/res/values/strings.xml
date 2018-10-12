@@ -16,4 +16,13 @@
     <string name="lbl_add_workout_type">Add workout type</string>
     <string name="lbl_add">Add</string>
     <string name="lbl_cancel">Cancel</string>
+    <string name="share">Share</string>
+    <string name="properties">Properties</string>
+    <string name="lbl_name">Name</string>
+    <string name="lbl_next">Next</string>
+    <string name="lbl_save">Save</string>
+    <string name="nothing_to_share">Nothing to share.</string>
+    <string name="record_message_pattern"  formatted="false">Hello! %s I have achieved new record in workout %s! (Count = %d, Weigth = %d)</string>
+    <string name="fix_orientation">Fix orientation</string>
+    <string name="exit">Exit</string>
 </resources>

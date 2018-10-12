@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/view_holder"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.WorkoutTypeActivity">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView
+        android:id="@+id/view_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="?android:attr/actionBarSize"
+        >
     <LinearLayout
         android:gravity="center_horizontal"
         android:layout_width="match_parent"
@@ -19,20 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             card_view:cardCornerRadius="4dp">
-            <LinearLayout
-                android:gravity="center_horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:orientation="vertical">
-        <TextView
-            android:id="@+id/workout_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:layout_gravity="center_horizontal"
-            />
+
         <ImageView
             android:id="@+id/workout_image"
             android:layout_width="wrap_content"
@@ -40,7 +44,6 @@
             android:layout_marginTop="8dp"
             android:background="@android:color/darker_gray"
             android:minWidth="200dp"/>
-            </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -170,6 +173,6 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
+    </ScrollView>
 
-
-</ScrollView>
+</FrameLayout>
