@@ -22,4 +22,16 @@
 Болтая-Шалтая,
 Шалтая-Болтая собрать!</string>
     <string name="stub_workout_name">Жим лежа</string>
+    <string name="lbl_add_workout_type">Добавить упражнение</string>
+    <string name="lbl_add">Добавить</string>
+    <string name="lbl_cancel">Отмена</string>
+    <string name="share">Поделиться</string>
+    <string name="properties">Свойства</string>
+    <string name="lbl_name">Название</string>
+    <string name="lbl_next">Далее</string>
+    <string name="lbl_save">Сохранить</string>
+    <string name="nothing_to_share">Нечем делиться</string>
+    <string name="record_message_pattern">Привет! %s я установил новый рекорд в упражнении %s! (Количество = %d, Вес = %d)</string>
+    <string name="fix_orientation">Запретить поворот</string>
+    <string name="exit">Выход</string>
 </resources>
