@@ -17,13 +17,12 @@ import ru.magnat.workout.R;
 
 class WorkoutListAdapter extends RealmRecyclerViewAdapter<WorkoutType,WorkoutListAdapter.ViewHolder> {
 
-    private WorkoutListActivity activity;
+
     private int selectedPosition;
     private OnSelectPositionEventListener onSelectPositionEventListener;
 
-    public WorkoutListAdapter(WorkoutListActivity activity, @Nullable OrderedRealmCollection<WorkoutType> data, int selectedPosition) {
+    public WorkoutListAdapter(@Nullable OrderedRealmCollection<WorkoutType> data, int selectedPosition) {
         super(data, true);
-        this.activity = activity;
         this.selectedPosition = selectedPosition;
     }
 
