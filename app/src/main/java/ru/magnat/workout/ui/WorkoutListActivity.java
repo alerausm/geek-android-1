@@ -122,8 +122,8 @@ public class WorkoutListActivity extends AppCompatActivity implements OnSelectPo
                                 .equalTo("id", id)
                                 .findFirst();
                         if (item != null) {
-                            RealmResults<WorkoutType> results = realm.where(WorkoutType.class)
-                                    .equalTo("id", id)
+                            RealmResults<WorkoutResult> results = realm.where(WorkoutResult.class)
+                                    .equalTo("workout.id", id)
                                     .findAll();
                             if (results!=null && !results.isEmpty()) {
                                 results.deleteAllFromRealm();
