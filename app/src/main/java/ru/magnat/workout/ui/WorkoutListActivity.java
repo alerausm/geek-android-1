@@ -6,28 +6,36 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import ru.magnat.workout.Model.WorkoutResult;
 import ru.magnat.workout.Model.WorkoutType;
 import ru.magnat.workout.R;
 
-public class WorkoutListActivity extends AppCompatActivity {
+public class WorkoutListActivity extends AppCompatActivity implements OnSelectPositionEventListener {
+    private static final String KEY_SELECTED_POSITION = "selectedPosition";
     private Realm realm;
+    private WorkoutListAdapter workoutListAdapter;
+    private int selectedPosition = RecyclerView.NO_POSITION;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.workout_list_layout);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        if (savedInstanceState!=null) selectedPosition = savedInstanceState.getInt(KEY_SELECTED_POSITION,RecyclerView.NO_POSITION);
     }
 
     @Override
@@ -40,6 +48,19 @@ public class WorkoutListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         initUi();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        selectedPosition = getSelectedPosition();
+        outState.putInt(KEY_SELECTED_POSITION,selectedPosition);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        setSelectedPosition(savedInstanceState.getInt(KEY_SELECTED_POSITION,RecyclerView.NO_POSITION));
     }
 
     @Override
@@ -68,15 +89,11 @@ public class WorkoutListActivity extends AppCompatActivity {
 
     private void initUi() {
         RealmResults<WorkoutType> workouts = realm.where(WorkoutType.class).findAll();
-        final WorkoutListAdapter adapter = new WorkoutListAdapter(this,workouts);
-        ListView listView = findViewById(R.id.workout_list);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                openWorkoutType((WorkoutType) adapterView.getAdapter().getItem(position));
-            }
-        });
+        workoutListAdapter = new WorkoutListAdapter(this,workouts,selectedPosition);
+        workoutListAdapter.setOnSelectPositionEventListener(this);
+        RecyclerView listView = findViewById(R.id.workout_list);
+        listView.setLayoutManager(new LinearLayoutManager(this));
+        listView.setAdapter(workoutListAdapter);
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -86,6 +103,41 @@ public class WorkoutListActivity extends AppCompatActivity {
                 createWorkoutType();
             }
         });
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int position = viewHolder.getAdapterPosition();
+                final String id = workoutListAdapter.getItem(position).getId();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        WorkoutType item = realm.where(WorkoutType.class)
+                                .equalTo("id", id)
+                                .findFirst();
+                        if (item != null) {
+                            RealmResults<WorkoutType> results = realm.where(WorkoutType.class)
+                                    .equalTo("id", id)
+                                    .findAll();
+                            if (results!=null && !results.isEmpty()) {
+                                results.deleteAllFromRealm();
+                            }
+                            item.deleteFromRealm();
+                        }
+
+                    }
+                });
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(listView);
     }
 
     private void createWorkoutType() {
@@ -110,13 +162,28 @@ public class WorkoutListActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void openWorkoutType(WorkoutType item) {
-       WorkoutTypeActivity.open(this,item);
-    }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
+    }
+
+    public int getSelectedPosition() {
+        if (workoutListAdapter!=null) return workoutListAdapter.getSelectedPosition();
+        return RecyclerView.NO_POSITION;
+    }
+
+    public void setSelectedPosition(int selectedPosition) {
+        if (workoutListAdapter!=null) workoutListAdapter.setSelectedPosition(selectedPosition);
+    }
+
+    @Override
+    public void onSelectPosition(int position, Object object) {
+        selectedPosition = position;
+        if (selectedPosition!=RecyclerView.NO_POSITION && object!=null && object instanceof WorkoutType) {
+            WorkoutTypeActivity.open(this,(WorkoutType) object);
+        }
     }
 }
