@@ -89,7 +89,7 @@ public class WorkoutListActivity extends AppCompatActivity implements OnSelectPo
 
     private void initUi() {
         RealmResults<WorkoutType> workouts = realm.where(WorkoutType.class).findAll();
-        workoutListAdapter = new WorkoutListAdapter(this,workouts,selectedPosition);
+        workoutListAdapter = new WorkoutListAdapter(workouts,selectedPosition);
         workoutListAdapter.setOnSelectPositionEventListener(this);
         RecyclerView listView = findViewById(R.id.workout_list);
         listView.setLayoutManager(new LinearLayoutManager(this));
