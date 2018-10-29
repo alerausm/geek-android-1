@@ -19,7 +19,7 @@ class WorkoutListAdapter extends RealmRecyclerViewAdapter<WorkoutType,WorkoutLis
 
 
     private int selectedPosition;
-    private OnSelectPositionEventListener onSelectPositionEventListener;
+    private OnSelectWorkoutEventListener onSelectPositionEventListener;
 
     public WorkoutListAdapter(@Nullable OrderedRealmCollection<WorkoutType> data, int selectedPosition) {
         super(data, true);
@@ -66,11 +66,11 @@ class WorkoutListAdapter extends RealmRecyclerViewAdapter<WorkoutType,WorkoutLis
         return selectedPosition;
     }
 
-    public void setOnSelectPositionEventListener(OnSelectPositionEventListener listener) {
+    public void setOnSelectPositionEventListener(OnSelectWorkoutEventListener listener) {
         this.onSelectPositionEventListener = listener;
     }
     void fireSelectPositionEvent(int position,WorkoutType object) {
-        if (onSelectPositionEventListener!=null) onSelectPositionEventListener.onSelectPosition(position,object);
+        if (onSelectPositionEventListener!=null) onSelectPositionEventListener.onSelectWorkout(position,object);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

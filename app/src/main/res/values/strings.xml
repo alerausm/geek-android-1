@@ -3,7 +3,7 @@
     <string name="app_name">Workout</string>
     <string name="workout">workout</string>
     <string name="msg_invalid_input">Input invalid</string>
-    <string name="mask_weight"  formatted="false">%d kg</string>
+    <string name="mask_weight" formatted="false">%d kg</string>
     <string name="lbl_records">Records</string>
     <string name="lbl_record_date">Record date</string>
     <string name="lbl_record_count">Count</string>
@@ -22,7 +22,9 @@
     <string name="lbl_next">Next</string>
     <string name="lbl_save">Save</string>
     <string name="nothing_to_share">Nothing to share.</string>
-    <string name="record_message_pattern"  formatted="false">Hello! %s I have achieved new record in workout %s! (Count = %d, Weigth = %d)</string>
+    <string name="record_message_pattern" formatted="false">Hello! %s I have achieved new record in workout %s! (Count = %d, Weigth = %d)</string>
     <string name="fix_orientation">Fix orientation</string>
     <string name="exit">Exit</string>
+    <string name="title_activity_workout">WorkoutActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

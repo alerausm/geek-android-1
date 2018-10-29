@@ -2,19 +2,22 @@ package ru.magnat.workout.ui;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.UUID;
 
@@ -24,79 +27,83 @@ import ru.magnat.workout.Model.WorkoutResult;
 import ru.magnat.workout.Model.WorkoutType;
 import ru.magnat.workout.R;
 
-public class WorkoutListActivity extends AppCompatActivity implements OnSelectPositionEventListener {
+public class WorkoutListFragment extends Fragment {
     private static final String KEY_SELECTED_POSITION = "selectedPosition";
+    private static final String LOG_TAG = "WorkoutListFragment";
     private Realm realm;
     private WorkoutListAdapter workoutListAdapter;
     private int selectedPosition = RecyclerView.NO_POSITION;
 
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.workout_list_layout);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        if (savedInstanceState!=null) selectedPosition = savedInstanceState.getInt(KEY_SELECTED_POSITION,RecyclerView.NO_POSITION);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         realm = Realm.getDefaultInstance();
+        if (savedInstanceState!=null) {
+            selectedPosition = savedInstanceState.getInt(KEY_SELECTED_POSITION,RecyclerView.NO_POSITION);
+
+        }
+        View root = inflater.inflate(R.layout.workout_list_fragment,container,false);
+        setHasOptionsMenu(true);
+        initUi(root);
+        return root;
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        initUi();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        selectedPosition = getSelectedPosition();
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(KEY_SELECTED_POSITION,selectedPosition);
         super.onSaveInstanceState(outState);
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        setSelectedPosition(savedInstanceState.getInt(KEY_SELECTED_POSITION,RecyclerView.NO_POSITION));
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+    public void onDestroyView() {
         realm.close();
+         super.onDestroyView();
+
     }
 
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_workout_list,menu);
-        return super.onCreateOptionsMenu(menu);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_workout_list,menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_exit:
-                finish();
+                getActivity().finish();
                 return false;
             default:
-            return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
 
     }
 
-    private void initUi() {
+
+
+    private void initUi(View root) {
         RealmResults<WorkoutType> workouts = realm.where(WorkoutType.class).findAll();
         workoutListAdapter = new WorkoutListAdapter(workouts,selectedPosition);
-        workoutListAdapter.setOnSelectPositionEventListener(this);
-        RecyclerView listView = findViewById(R.id.workout_list);
-        listView.setLayoutManager(new LinearLayoutManager(this));
+        if (getContext() instanceof OnSelectWorkoutEventListener) {
+            workoutListAdapter.setOnSelectPositionEventListener(new OnSelectWorkoutEventListener() {
+
+                @Override
+                public void onSelectWorkout(int position, Object object) {
+                    selectedPosition = position;
+                    if ( getContext() instanceof  OnSelectWorkoutEventListener) {
+                        ((OnSelectWorkoutEventListener) getContext()).onSelectWorkout(position,object);
+                    }
+                }
+            });
+        }
+        RecyclerView listView = root.findViewById(R.id.workout_list);
+        listView.setLayoutManager(new LinearLayoutManager(getActivity()));
         listView.setAdapter(workoutListAdapter);
 
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = root.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,8 +148,8 @@ public class WorkoutListActivity extends AppCompatActivity implements OnSelectPo
     }
 
     private void createWorkoutType() {
-        final EditText workoutEditText = new EditText(WorkoutListActivity.this);
-        AlertDialog dialog = new AlertDialog.Builder(WorkoutListActivity.this)
+        final EditText workoutEditText = new EditText(getContext());
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setTitle(getString(R.string.lbl_add_workout_type))
                 .setView(workoutEditText)
                 .setPositiveButton(getString(R.string.lbl_add), new DialogInterface.OnClickListener() {
@@ -162,28 +169,4 @@ public class WorkoutListActivity extends AppCompatActivity implements OnSelectPo
         dialog.show();
     }
 
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
-
-    public int getSelectedPosition() {
-        if (workoutListAdapter!=null) return workoutListAdapter.getSelectedPosition();
-        return RecyclerView.NO_POSITION;
-    }
-
-    public void setSelectedPosition(int selectedPosition) {
-        if (workoutListAdapter!=null) workoutListAdapter.setSelectedPosition(selectedPosition);
-    }
-
-    @Override
-    public void onSelectPosition(int position, Object object) {
-        selectedPosition = position;
-        if (selectedPosition!=RecyclerView.NO_POSITION && object!=null && object instanceof WorkoutType) {
-            WorkoutTypeActivity.open(this,(WorkoutType) object);
-        }
-    }
 }
